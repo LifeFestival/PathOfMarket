@@ -17,20 +17,18 @@ class ItemListWidget extends StatefulWidget {
 class _ItemListWidgetState extends State<ItemListWidget> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: ListView.builder(
-      itemCount: widget._itemList.length,
-      itemBuilder: _generateItemTile,
-      padding: EdgeInsets.symmetric(vertical: 3.0),
-    ));
-  }
-
-  Card _generateItemTile(BuildContext context, int index) {
-    return Card(
-      color: Colors.white,
-      child: ItemTile(
-        widget._itemList[index]
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Currency list'),
       ),
+      body: Center(
+          child: ListView.builder(
+        itemCount: widget._itemList.length,
+        itemBuilder: _generateItemTile,
+        padding: EdgeInsets.symmetric(vertical: 3.0),
+      )),
     );
   }
+
+  ItemTile _generateItemTile(BuildContext context, int index) => ItemTile(widget._itemList[index]);
 }

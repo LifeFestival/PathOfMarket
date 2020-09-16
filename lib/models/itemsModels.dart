@@ -4,11 +4,11 @@ class CurrencyItem extends Item{
   @override
   final String itemName;
 
-  final int _count;
-  final double _value;
-  final double _changePercent;
+  final int count;
+  final double value;
+  final double changePercent;
 
-  CurrencyItem(this.itemName, this._count, this._value, this._changePercent) : super(itemName);
+  CurrencyItem(this.itemName, this.count, this.value, this.changePercent) : super(itemName);
 
   factory CurrencyItem.fromJson(Map<String, dynamic> json) {
     return CurrencyItem(
