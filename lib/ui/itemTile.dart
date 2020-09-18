@@ -34,7 +34,39 @@ class _ItemTileState extends State<ItemTile> {
               Icons.filter_frames,
               color: Colors.orange,
             ),
-            Expanded(child: Text(widget._item.itemName, textAlign: TextAlign.center), flex: 2,)
+            Expanded(child: Text(widget._item.itemName, textAlign: TextAlign.center), flex: 2,),
+            Padding(
+              padding: EdgeInsets.only(),
+              child: Column(
+              children: [
+                Icon(
+                Icons.attach_money,
+                color: Colors.orange,),
+                Text(widget._item.value.toStringAsFixed(1))
+              ],
+            )),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Column(
+              children: [
+                Icon(
+                  Icons.content_copy,
+                  color: Colors.orange,
+                ),
+                Text(widget._item.count.toString())
+              ],
+            )),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Column(
+              children: [
+                Icon(
+                  Icons.equalizer,
+                  color: widget._item.changePercent >= 0 ? Colors.green : Colors.red,
+                ),
+                Text(widget._item.changePercent.round().toString())
+              ],
+            ))
           ],
         ),
       ),
