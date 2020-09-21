@@ -15,7 +15,7 @@ class MainApiService {
 
   Future<List<Category>> _getCurrencyCategory() async {
     response = await http.get(
-        'https://poe.ninja/api/data/currencyoverview?league=Standard&type=Currency&language=ru');
+        'https://poe.ninja/api/data/currencyoverview?league=Heist&type=Currency&language=ru');
 
     if (response.statusCode == 200) {
       log('Currency request was sucsessfull.');
