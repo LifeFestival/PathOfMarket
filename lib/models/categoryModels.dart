@@ -9,8 +9,8 @@ abstract class Category {
 
   final String categoryIconUri;
 
-  
-  Category(this.categoryName, this.categotyType, this.itemList, {this.categoryIconUri});
+  Category(this.categoryName, this.categotyType, this.itemList,
+      {this.categoryIconUri});
 }
 
 abstract class Item {
@@ -24,16 +24,38 @@ class CurrencyCategory extends Category {
 
   CurrencyCategory(this.currencyItemsList, categoryName,
       {String categoryIconUri})
-      : super(categoryName, CategoryType.currency, currencyItemsList, categoryIconUri: categoryIconUri);
+      : super(categoryName, CategoryType.currency, currencyItemsList,
+            categoryIconUri: categoryIconUri);
 
   factory CurrencyCategory.fromJson(
       Map<String, dynamic> json, String categoryName,
       {String categoryIconUri}) {
+    var itemsList = json['lines'] as List;
 
-        var itemsList = json['lines'] as List;
+    List<CurrencyItem> currencyList =
+        itemsList.map((e) => CurrencyItem.fromJson(e)).toList();
 
-        List<CurrencyItem> currencyList = itemsList.map((e) => CurrencyItem.fromJson(e)).toList();
-        
-        return CurrencyCategory(currencyList, categoryName, categoryIconUri: categoryIconUri);
+    return CurrencyCategory(currencyList, categoryName,
+        categoryIconUri: categoryIconUri);
+  }
+}
+
+class FossilCategory extends Category {
+  final List<RegularItem> fossilslist;
+
+  FossilCategory(this.fossilslist, categoryName, {String categoryIconUrl})
+      : super(categoryName, CategoryType.fossils, fossilslist,
+            categoryIconUri: categoryIconUrl);
+
+  factory FossilCategory.fromJson(
+      Map<String, dynamic> json, String categoryName,
+      {String categoryIconUri}) {
+    var itemsList = json['lines'] as List;
+
+    List<RegularItem> fossilsList =
+        itemsList.map((e) => RegularItem.fromJson(e)).toList();
+
+    return FossilCategory(fossilsList, categoryName,
+        categoryIconUrl: categoryIconUri);
   }
 }
