@@ -15,6 +15,7 @@ class UrlBuilder {
     defaultString += "league=" + CURRENT_LEAGUE_NAME;
     defaultString += AND_DELIMETER;
     defaultString += "type=" + catType;
+    defaultString += AND_DELIMETER;
     defaultString += "language=" + LANGUAGE_PATH_RU;
 
     return defaultString;

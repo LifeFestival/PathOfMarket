@@ -37,7 +37,7 @@ class RegularItem extends Item {
       json["name"],
       json["count"],
       json["chaosValue"],
-      json["sparkLine"]["totalChange"]
+      json["sparkline"]["totalChange"]
     );
   }
 }

@@ -19,8 +19,10 @@ class MainApiService {
   }
 
   Future<List<Category>> _getCurrencyCategory() async {
+
     String url = urlBuilder.buildUrl(true, CategoryType.currency);
 
+    log("Getting itmes by url: $url");
     response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -41,6 +43,7 @@ class MainApiService {
   Future<List<Category>> _getFossilsCategory() async {
     String url = urlBuilder.buildUrl(false, CategoryType.fossils);
 
+    log("Getting itmes by url: $url");
     response = await http.get(url);
 
     if (response.statusCode == 200) {
