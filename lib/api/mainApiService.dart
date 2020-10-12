@@ -8,56 +8,69 @@ import 'package:http/http.dart' as http;
 class MainApiService {
   final List<Category> resultList = [];
   final UrlBuilder urlBuilder = UrlBuilder();
+  String _url = '';
 
   http.Response response;
 
   Future<List<Category>> getCategoryList() async {
     await _getCurrencyCategory();
     await _getFossilsCategory();
+    await _getScarabsCategory();
 
     return resultList;
   }
 
-  Future<List<Category>> _getCurrencyCategory() async {
-
-    String url = urlBuilder.buildUrl(true, CategoryType.currency);
-
-    log("Getting itmes by url: $url");
-    response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      log('Currency request was sucsessfull.');
-      resultList.add(CurrencyCategory.fromJson(
-          json.decode(response.body), CategoryType.currency.name));
-
-      return resultList;
-    } else {
-      log('Failed to load currency category.' +
-          response.statusCode.toString() +
-          response.reasonPhrase);
-
-      return resultList;
-    }
+  Future<void> _getCurrencyCategory() async {
+    return _getCategory(CategoryType.currency);
   }
 
-  Future<List<Category>> _getFossilsCategory() async {
-    String url = urlBuilder.buildUrl(false, CategoryType.fossils);
+  Future<void> _getFossilsCategory() async {
+    return _getCategory(CategoryType.fossils);
+  }
 
-    log("Getting itmes by url: $url");
-    response = await http.get(url);
+  Future<void> _getScarabsCategory() async {
+    return _getCategory(CategoryType.scarabs);
+  }
+
+  Future<void> _getCategory(CategoryType catType) async {
+    _url = urlBuilder.buildUrl(catType == CategoryType.currency, catType);
+
+    log("Getting itmes by url: $_url");
+    response = await http.get(_url);
 
     if (response.statusCode == 200) {
-      log('Fossils request was successfull.');
-      resultList.add(FossilCategory.fromJson(
-          json.decode(response.body), CategoryType.fossils.name));
 
-      return resultList;
+      log('${catType.name} request was successfull.');
+
+      switch (catType) {
+        case CategoryType.currency : resultList.add(CurrencyCategory.fromJson(json.decode(response.body), catType.name));         
+          break;
+        case CategoryType.fossils : resultList.add(FossilCategory.fromJson(json.decode(response.body), catType.name));
+          break;
+        case CategoryType.scarabs : resultList.add(ScarabCategory.fromJson(json.decode(response.body), catType.name));
+          break;
+        case CategoryType.divinationCards:
+          // TODO: Handle this case.
+          break;
+        case CategoryType.oils:
+          // TODO: Handle this case.
+          break;
+        case CategoryType.beasts:
+          // TODO: Handle this case.
+          break;
+        case CategoryType.prophecies:
+          // TODO: Handle this case.
+          break;
+        case CategoryType.incubators:
+          // TODO: Handle this case.
+          break;
+      }
+
     } else {
-      log('Failed to load fossils category.' +
-          response.statusCode.toString() +
+      log('Failed to load ${catType.name} category. ' +
+          response.statusCode.toString() + ' ' +
           response.reasonPhrase);
     }
 
-    return resultList;
   }
 }

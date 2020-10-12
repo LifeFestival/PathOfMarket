@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:path_of_market/enums/categoryTypeEnum.dart';
 import 'package:path_of_market/models/itemsModels.dart';
 
@@ -58,4 +59,23 @@ class FossilCategory extends Category {
     return FossilCategory(fossilsList, categoryName,
         categoryIconUrl: categoryIconUri);
   }
+}
+
+class ScarabCategory extends Category {
+  final List<RegularItem> scarabsList;
+
+  ScarabCategory(this.scarabsList, categoryName, {String categoryIconUrl}) : super(categoryName, CategoryType.scarabs, scarabsList, categoryIconUri: categoryIconUrl);
+
+  factory ScarabCategory.fromJson(
+      Map<String, dynamic> json, String categoryName,
+      {String categoryIconUri}) {
+    var itemsList = json['lines'] as List;
+
+    List<RegularItem> scarabsList =
+        itemsList.map((e) => RegularItem.fromJson(e)).toList();
+
+    return ScarabCategory(scarabsList, categoryName,
+        categoryIconUrl: categoryIconUri);
+  }
+  
 }
