@@ -35,7 +35,7 @@ class MainApiService {
   Future<void> _getCategory(CategoryType catType) async {
     _url = urlBuilder.buildUrl(catType == CategoryType.currency, catType);
 
-    log("Getting itmes by url: $_url");
+    log("Getting ${catType.name} items by url: $_url");
     response = await http.get(_url);
 
     if (response.statusCode == 200) {

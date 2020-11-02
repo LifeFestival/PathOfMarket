@@ -28,9 +28,9 @@ class RegularItem extends Item {
 
   final int count;
   final double value;
-  final double changepercent;
+  final double changePercent;
 
-  RegularItem(this.itemName, this.count, this.value, this.changepercent) : super(itemName);
+  RegularItem(this.itemName, this.count, this.value, this.changePercent) : super(itemName);
 
   factory RegularItem.fromJson(Map<String, dynamic> json) {
     return RegularItem(

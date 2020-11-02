@@ -3,16 +3,16 @@ import 'package:flutter/widgets.dart';
 import 'package:path_of_market/models/itemsModels.dart';
 import 'package:uuid/uuid.dart';
 
-class ItemTile extends StatefulWidget {
+class CurrencyTile extends StatefulWidget {
   final CurrencyItem _item;
 
-  ItemTile(this._item);
+  CurrencyTile(this._item);
 
   @override
-  _ItemTileState createState() => _ItemTileState();
+  _CurrencyTileState createState() => _CurrencyTileState();
 }
 
-class _ItemTileState extends State<ItemTile> {
+class _CurrencyTileState extends State<CurrencyTile> {
   final Uuid uuid = Uuid();
 
   @override
