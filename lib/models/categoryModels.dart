@@ -16,8 +16,11 @@ abstract class Category {
 
 abstract class Item {
   final String itemName;
+  final int count;
+  final double value;
+  final double changePercent;
 
-  Item(this.itemName);
+  Item(this.itemName, this.count, this.value, this.changePercent);
 }
 
 class CurrencyCategory extends Category {
