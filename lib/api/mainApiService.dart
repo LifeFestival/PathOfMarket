@@ -16,6 +16,11 @@ class MainApiService {
     await _getCurrencyCategory();
     await _getFossilsCategory();
     await _getScarabsCategory();
+    await _getDivinationCategory();
+    await _getOilsCategory();
+    await _getBeastsCategory();
+    await _getPropheciesCategory();
+    await _getIncubatorsCategory();
 
     return resultList;
   }
@@ -32,6 +37,26 @@ class MainApiService {
     return _getCategory(CategoryType.scarabs);
   }
 
+  Future<void> _getDivinationCategory() async {
+    return _getCategory(CategoryType.divinationCards);
+  }
+
+  Future<void> _getOilsCategory() async {
+    return _getCategory(CategoryType.oils);
+  }
+
+  Future<void> _getBeastsCategory() async {
+    return _getCategory(CategoryType.beasts);
+  }
+
+  Future<void> _getPropheciesCategory() async {
+    return _getCategory(CategoryType.prophecies);
+  }
+
+  Future<void> _getIncubatorsCategory() async {
+    return _getCategory(CategoryType.incubators);
+  }
+
   Future<void> _getCategory(CategoryType catType) async {
     _url = urlBuilder.buildUrl(catType == CategoryType.currency, catType);
 
@@ -39,38 +64,47 @@ class MainApiService {
     response = await http.get(_url);
 
     if (response.statusCode == 200) {
-
       log('${catType.name} request was successfull.');
 
       switch (catType) {
-        case CategoryType.currency : resultList.add(CurrencyCategory.fromJson(json.decode(response.body), catType.name));         
+        case CategoryType.currency:
+          resultList.add(CurrencyCategory.fromJson(
+              json.decode(response.body), catType.name));
           break;
-        case CategoryType.fossils : resultList.add(FossilCategory.fromJson(json.decode(response.body), catType.name));
+        case CategoryType.fossils:
+          resultList.add(FossilCategory.fromJson(
+              json.decode(response.body), catType.name));
           break;
-        case CategoryType.scarabs : resultList.add(ScarabCategory.fromJson(json.decode(response.body), catType.name));
+        case CategoryType.scarabs:
+          resultList.add(ScarabCategory.fromJson(
+              json.decode(response.body), catType.name));
           break;
         case CategoryType.divinationCards:
-          // TODO: Handle this case.
+          resultList.add(DivinationCardsCategory.fromJson(
+              json.decode(response.body), catType.name));
           break;
         case CategoryType.oils:
-          // TODO: Handle this case.
+          resultList.add(
+              OilsCategory.fromJson(json.decode(response.body), catType.name));
           break;
         case CategoryType.beasts:
-          // TODO: Handle this case.
+          resultList.add(BeastsCategory.fromJson(
+              json.decode(response.body), catType.name));
           break;
         case CategoryType.prophecies:
-          // TODO: Handle this case.
+          resultList.add(PropheciesCategory.fromJson(
+              json.decode(response.body), catType.name));
           break;
         case CategoryType.incubators:
-          // TODO: Handle this case.
+          resultList.add(IncubatorsCategory.fromJson(
+              json.decode(response.body), catType.name));
           break;
       }
-
     } else {
       log('Failed to load ${catType.name} category. ' +
-          response.statusCode.toString() + ' ' +
+          response.statusCode.toString() +
+          ' ' +
           response.reasonPhrase);
     }
-
   }
 }

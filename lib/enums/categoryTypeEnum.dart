@@ -26,9 +26,3 @@ extension CategoryName on CategoryType {
 
   String get name => names[this];
 }
-
-String _test() {
-  CategoryType cat = CategoryType.beasts;
-
-  return cat.name;
-}
