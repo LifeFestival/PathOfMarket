@@ -20,7 +20,7 @@ final Uuid uuid = Uuid();
 
     return ListTile(
       key: Key(uuid.v1()),
-      leading: Icon(Icons.list, color: Colors.green,),
+      leading: widget._category.icon,
       title: Text(widget._category.categoryName),
       onTap: () {
         Navigator.push(context,

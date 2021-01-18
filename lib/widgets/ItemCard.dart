@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path_of_market/models/itemsModels.dart';
-import 'package:uuid/uuid.dart';
+import 'package:path_of_market/models/categoryModels.dart';
 
-class ItemTile extends StatefulWidget {
-  final CurrencyItem _item;
+class ItemCard extends StatefulWidget {
 
-  ItemTile(this._item);
+  final Item _item;
+
+  ItemCard(this._item);
 
   @override
-  _ItemTileState createState() => _ItemTileState();
+  _ItemCardState createState() => _ItemCardState();
 }
 
-class _ItemTileState extends State<ItemTile> {
-  final Uuid uuid = Uuid();
-
+class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
-    return _buildTile();
-  }
-
-  Widget _buildTile() {
     return Card(
       color: Colors.white,
       child: Container(

@@ -1,14 +1,12 @@
+import 'dart:convert';
+
 import 'package:path_of_market/models/categoryModels.dart';
 
-class CurrencyItem extends Item{
+class CurrencyItem extends Item {
   @override
   final String itemName;
 
-  final int count;
-  final double value;
-  final double changePercent;
-
-  CurrencyItem(this.itemName, this.count, this.value, this.changePercent) : super(itemName);
+  CurrencyItem(this.itemName, int count, double value, double changePercent) : super(itemName, count, value, changePercent);
 
   factory CurrencyItem.fromJson(Map<String, dynamic> json) {
     return CurrencyItem(
@@ -16,6 +14,23 @@ class CurrencyItem extends Item{
       json["receive"]["count"],
       json["receive"]["value"],
       json["receiveSparkLine"]["totalChange"]
+    );
+  }
+}
+
+class RegularItem extends Item {
+  @override
+  final String itemName;
+
+
+  RegularItem(this.itemName, int count, double value, double changePercent) : super(itemName, count, value, changePercent);
+
+  factory RegularItem.fromJson(Map<String, dynamic> json) {
+    return RegularItem(
+      json["name"],
+      json["count"],
+      json["chaosValue"],
+      json["sparkline"]["totalChange"]
     );
   }
 }

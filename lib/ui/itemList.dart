@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_of_market/models/categoryModels.dart';
-import 'package:path_of_market/ui/itemTile.dart';
+import 'package:path_of_market/models/itemsModels.dart';
+import 'package:path_of_market/ui/ItemTile.dart';
+import 'package:path_of_market/ui/currencyTile.dart';
 
 class ItemListWidget extends StatefulWidget {
   static const String routeName = '/itemList';
@@ -30,5 +32,11 @@ class _ItemListWidgetState extends State<ItemListWidget> {
     );
   }
 
-  ItemTile _generateItemTile(BuildContext context, int index) => ItemTile(widget._itemList[index]);
+  Widget _generateItemTile(BuildContext context, int index) {
+    var _item = widget._itemList[index];
+
+    if (_item is CurrencyItem) {
+      return CurrencyTile(_item);
+    } else return ItemTile(_item);
+  }
 }
