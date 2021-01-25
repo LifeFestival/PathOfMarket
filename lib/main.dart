@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Path of Market',
       theme: ThemeData(primarySwatch: Colors.green),
       home: StartScreen(),
@@ -39,6 +40,9 @@ class _StartScreenState extends State<StartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('ItemsList'),
+        actions: [
+          IconButton(icon: Icon(Icons.more_vert), onPressed: () {})
+        ],
       ),
       backgroundColor: Colors.grey[100],
       body: Center(
@@ -46,7 +50,6 @@ class _StartScreenState extends State<StartScreen> {
           future: _categoryList,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-
               onSuccessLog(snapshot.data);
 
               return CategoryListWidget(snapshot.data);
