@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_of_market/models/categoryModels.dart';
@@ -19,7 +21,15 @@ class ItemListWidget extends StatefulWidget {
 class _ItemListWidgetState extends State<ItemListWidget> {
 
   Icon searchIcon = Icon(Icons.search);
-  Widget titleWidget = Text('ItemsList'); 
+  Widget titleWidget = Text('ItemsList');
+
+  List<Item> _filteredNameList;
+
+  @override
+  void initState() {
+    _filteredNameList = widget._itemList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +42,11 @@ class _ItemListWidgetState extends State<ItemListWidget> {
               if (this.searchIcon.icon == Icons.search) {
                 this.searchIcon = Icon(Icons.cancel);
                 this.titleWidget = TextField(
+                  onChanged: (String value) {
+                    setState(() {
+                      this._textSearchCallback(value);
+                    });
+                  },
                   textInputAction: TextInputAction.go,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -46,6 +61,7 @@ class _ItemListWidgetState extends State<ItemListWidget> {
                   ),
                 );
               } else {
+                this._filteredNameList = widget._itemList;
                 this.searchIcon = Icon(Icons.search);
                 this.titleWidget = Text('ItemsList');
               }
@@ -55,7 +71,7 @@ class _ItemListWidgetState extends State<ItemListWidget> {
       ),
       body: Center(
           child: ListView.builder(
-        itemCount: widget._itemList.length,
+        itemCount: this._filteredNameList.length,
         itemBuilder: _generateItemTile,
         padding: EdgeInsets.symmetric(vertical: 3.0),
       )),
@@ -63,10 +79,14 @@ class _ItemListWidgetState extends State<ItemListWidget> {
   }
 
   Widget _generateItemTile(BuildContext context, int index) {
-    var _item = widget._itemList[index];
+    var _item = this._filteredNameList[index];
 
     if (_item is CurrencyItem) {
       return CurrencyTile(_item);
     } else return ItemTile(_item);
+  }
+
+  _textSearchCallback(String text) {
+    this._filteredNameList = widget._itemList.where((item) => item.itemName.toLowerCase().contains(text.toLowerCase())).toList();
   }
 }
