@@ -4,6 +4,7 @@ import 'package:path_of_market/api/urlBuilder.dart';
 import 'package:path_of_market/enums/categoryTypeEnum.dart';
 import 'package:path_of_market/models/categoryModels.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_of_market/utils/apiConstants.dart';
 
 class MainApiService {
   final List<Category> resultList = [];
@@ -61,7 +62,8 @@ class MainApiService {
     _url = urlBuilder.buildUrl(catType == CategoryType.currency, catType);
 
     log("Getting ${catType.name} items by url: $_url");
-    response = await http.get(_url);
+
+    response = await http.get(Uri.parse(_url));
 
     if (response.statusCode == 200) {
       log('${catType.name} request was successfull.');

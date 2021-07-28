@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_of_market/api/mainApiService.dart';
 import 'package:path_of_market/models/categoryModels.dart';
 import 'package:path_of_market/ui/categoryList.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_of_market/utils/localization.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,6 +17,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Path of Market',
       theme: ThemeData(primarySwatch: Colors.green),
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [
+        Locale('en', ''),
+        Locale('ru', ''),
+      ],
       home: StartScreen(),
     );
   }
@@ -37,12 +50,12 @@ class _StartScreenState extends State<StartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    localization = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('ItemsList'),
-        actions: [
-          IconButton(icon: Icon(Icons.more_vert), onPressed: () {})
-        ],
+        title: Text(localization.categoryList),
+        actions: [IconButton(icon: Icon(Icons.more_vert), onPressed: () {})],
       ),
       backgroundColor: Colors.grey[100],
       body: Center(
@@ -54,7 +67,16 @@ class _StartScreenState extends State<StartScreen> {
 
               return CategoryListWidget(snapshot.data);
             } else if (snapshot.hasError) {
-              return Text("Can't get categories!");
+
+              log(localization.categoryListError +
+                  ' ' +
+                  snapshot.error.toString() +
+                  '\n' +
+                  snapshot.stackTrace.toString());
+
+              return Text(localization.categoryListError +
+                  ' ' +
+                  snapshot.error.toString());
             }
 
             return CircularProgressIndicator();
@@ -63,10 +85,13 @@ class _StartScreenState extends State<StartScreen> {
       ),
     );
   }
-}
 
-void onSuccessLog(List<Category> catList) {
-  catList.forEach((element) {
-    log(element.categotyType.toString() + 'items: ' + element.itemList.map((e) => e.itemName + ', ').join() + '\n');
-  });
+  void onSuccessLog(List<Category> catList) {
+    catList.forEach((element) {
+      log(element.categotyType.toString() +
+          'items: ' +
+          element.itemList.map((e) => e.itemName + ', ').join() +
+          '\n');
+    });
+  }
 }
