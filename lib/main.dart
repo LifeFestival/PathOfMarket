@@ -7,6 +7,9 @@ import 'package:path_of_market/models/categoryModels.dart';
 import 'package:path_of_market/ui/categoryList.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_of_market/utils/localization.dart';
+import 'package:path_of_market/models/itemsModels.dart';
+import 'package:path_of_market/ui/ItemTile.dart';
+import 'package:path_of_market/ui/currencyTile.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,6 +45,9 @@ class _StartScreenState extends State<StartScreen> {
 
   Future<List<Category>> _categoryList;
 
+  Category _selectedCategory;
+  List<Item> _selectedItems;
+
   @override
   void initState() {
     super.initState();
@@ -65,9 +71,29 @@ class _StartScreenState extends State<StartScreen> {
             if (snapshot.hasData) {
               onSuccessLog(snapshot.data);
 
-              return CategoryListWidget(snapshot.data);
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth > 500) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: CategoryListWidget(snapshot.data, onCategoryTap: onCategoryTapCallback,),
+                          flex: 1,
+                        ),
+                        Expanded(
+                          child: _selectedCategory == null
+                              ? Center(child: Text('Select category'))
+                              : Center(child: generateItems(_selectedCategory.itemList)),
+                          flex: 2,
+                        )
+                      ],
+                    );
+                  } else {
+                    return CategoryListWidget(snapshot.data);
+                  }
+                },
+              );
             } else if (snapshot.hasError) {
-
               log(localization.categoryListError +
                   ' ' +
                   snapshot.error.toString() +
@@ -86,6 +112,12 @@ class _StartScreenState extends State<StartScreen> {
     );
   }
 
+  void onCategoryTapCallback(Category category) {
+    setState(() {
+      _selectedCategory = category;
+    });
+  }
+
   void onSuccessLog(List<Category> catList) {
     catList.forEach((element) {
       log(element.categotyType.toString() +
@@ -93,5 +125,25 @@ class _StartScreenState extends State<StartScreen> {
           element.itemList.map((e) => e.itemName + ', ').join() +
           '\n');
     });
+  }
+
+  Widget generateItems(List<Item> items) {
+
+    _selectedItems = items;
+
+    return ListView.builder(
+      itemCount: _selectedItems.length,
+      itemBuilder: _generateItemTile,
+      padding: EdgeInsets.symmetric(vertical: 3.0),
+    );
+  }
+
+  Widget _generateItemTile(BuildContext context, int index) {
+    Item _item = _selectedItems[index];
+
+    if (_item is CurrencyItem) {
+      return CurrencyTile(_item);
+    } else
+      return ItemTile(_item);
   }
 }

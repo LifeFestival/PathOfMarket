@@ -6,8 +6,9 @@ import 'package:path_of_market/ui/categoryTile.dart';
 class CategoryListWidget extends StatefulWidget {
 
   final List<Category> _categoryList;
+  final void Function(Category) onCategoryTap;
 
-  CategoryListWidget(this._categoryList);
+  CategoryListWidget(this._categoryList, { this.onCategoryTap });
 
   @override
   _CategoryListWidgetState createState() => _CategoryListWidgetState();
@@ -27,7 +28,7 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
 
     return Card(
       color: Colors.white,
-      child: CategoryTile(widget._categoryList[index]),
+      child: CategoryTile(widget._categoryList[index], onCategoryTap: widget.onCategoryTap,),
     ) ;
   }
 

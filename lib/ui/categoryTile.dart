@@ -6,8 +6,9 @@ import 'package:uuid/uuid.dart';
 
 class CategoryTile extends StatefulWidget {
   final Category _category;
+  final void Function(Category) onCategoryTap;
 
-  CategoryTile(this._category);
+  CategoryTile(this._category, { this.onCategoryTap });
 
   @override
   _CategoryTileState createState() => _CategoryTileState();
@@ -16,18 +17,27 @@ class CategoryTile extends StatefulWidget {
 class _CategoryTileState extends State<CategoryTile> {
   @override
   Widget build(BuildContext context) {
-final Uuid uuid = Uuid();
+    final Uuid uuid = Uuid();
 
     return ListTile(
       key: Key(uuid.v1()),
       leading: widget._category.icon,
       title: Text(widget._category.categoryName),
       onTap: () {
-        Navigator.push(context,
-        MaterialPageRoute(
-          builder: (context) => ItemListWidget(widget._category.itemList)
-          ));
+        if (widget.onCategoryTap == null) {
+          _defaultCategoryTap();
+        } else {
+          widget.onCategoryTap(widget._category);
+        }
       },
     );
+  }
+
+  void _defaultCategoryTap() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ItemListWidget(widget._category.itemList)));
   }
 }
