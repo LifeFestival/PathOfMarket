@@ -1,22 +1,31 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path_of_market/api/mainApiService.dart';
+import 'package:path_of_market/enums/categoryTypeEnum.dart';
 import 'package:path_of_market/models/categoryModels.dart';
 import 'package:path_of_market/models/itemsModels.dart';
 import 'package:path_of_market/ui/ItemTile.dart';
 import 'package:path_of_market/ui/currencyTile.dart';
+import 'package:path_of_market/utils/localization.dart';
 
 class ItemListWidget extends StatefulWidget {
   static const String routeName = '/itemList';
 
-  final List<Item> _itemList;
+  final CategoryType _catType;
 
-  ItemListWidget(this._itemList);
+  ItemListWidget(this._catType);
 
   @override
   _ItemListWidgetState createState() => _ItemListWidgetState();
 }
 
 class _ItemListWidgetState extends State<ItemListWidget> {
+  final MainApiService _mainApiService = MainApiService();
+
+  List<Item> _itemList = [];
+
   Icon _searchIcon = Icon(Icons.search);
   Widget _titleWidget = Text('ItemsList');
 
@@ -56,7 +65,21 @@ class _ItemListWidgetState extends State<ItemListWidget> {
                 }),
           ],
         ),
-        body: Center(child: _buildList()));
+        body: FutureBuilder<List<Item>>(
+            future: _mainApiService.getItemList(widget._catType),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _itemList = snapshot.data;
+                return Center(child: _buildList());
+              } else if (snapshot.hasError) {
+                log(localization.categoryListError +
+                    ' ' +
+                    snapshot.error.toString() +
+                    '\n' +
+                    snapshot.stackTrace.toString());
+              }
+              return Center(child: CircularProgressIndicator());
+            }));
   }
 
   Widget _generateItemTile(BuildContext context, int index) {
@@ -83,12 +106,11 @@ class _ItemListWidgetState extends State<ItemListWidget> {
   }
 
   List<Item> _filterItemList() {
-    if (_filterString == '') return widget._itemList;
+    if (_filterString == '') return _itemList;
 
-    return widget._itemList
-        .where((item) => item.itemName
-            .toLowerCase()
-            .contains(_filterString.toLowerCase()))
+    return _itemList
+        .where((item) =>
+            item.itemName.toLowerCase().contains(_filterString.toLowerCase()))
         .toList();
   }
 }
