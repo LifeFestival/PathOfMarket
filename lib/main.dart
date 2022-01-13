@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_of_market/api/mainApiService.dart';
-import 'package:path_of_market/enums/categoryTypeEnum.dart';
 import 'package:path_of_market/models/categoryModels.dart';
-import 'package:path_of_market/models/itemsModels.dart';
-import 'package:path_of_market/ui/ItemTile.dart';
 import 'package:path_of_market/ui/categoryList.dart';
-import 'package:path_of_market/ui/currencyTile.dart';
+import 'package:path_of_market/ui/itemList.dart';
 import 'package:path_of_market/utils/localization.dart';
 
 void main() => runApp(MyApp());
@@ -59,10 +56,7 @@ class _StartScreenState extends State<StartScreen> {
     localization = AppLocalizations.of(context);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(localization.categoryList),
-          actions: [IconButton(icon: Icon(Icons.more_vert), onPressed: () {})],
-        ),
+      appBar: PreferredSize(child: AppBar(), preferredSize: Size.fromHeight(0)),
         backgroundColor: Colors.grey[100],
         body: Center(child: LayoutBuilder(
           builder: (context, constraints) {
@@ -78,10 +72,9 @@ class _StartScreenState extends State<StartScreen> {
                   ),
                   Expanded(
                     child: _selectedCategory == null
-                        ? Center(child: Text('Select category'))
+                        ? Center(child: Text(localization.selectCategory))
                         : Center(
-                            child:
-                                generateItems(_selectedCategory.categoryType)),
+                            child: ItemListWidget(_selectedCategory.categoryType, true)),
                     flex: 2,
                   )
                 ],
@@ -99,37 +92,6 @@ class _StartScreenState extends State<StartScreen> {
     setState(() {
       _selectedCategory = category;
     });
-  }
-
-  Widget generateItems(CategoryType catType) {
-
-    return FutureBuilder<List<Item>>(
-      future: mainApiService.getItemList(catType),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              Item _item = snapshot.data[index];
-
-              if (_item is CurrencyItem) {
-                return CurrencyTile(_item);
-              } else
-                return ItemTile(_item);
-            },
-            padding: EdgeInsets.symmetric(vertical: 3.0),
-          );
-        } else if (snapshot.hasError) {
-          log(localization.categoryListError +
-              ' ' +
-              snapshot.error.toString() +
-              '\n' +
-              snapshot.stackTrace.toString());
-          return Text(
-              localization.categoryListError + ' ' + snapshot.error.toString());}
-        return CircularProgressIndicator();
-      },
-    );
   }
 
   List<Category> _makeCategories() {

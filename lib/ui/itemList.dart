@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:path_of_market/api/mainApiService.dart';
 import 'package:path_of_market/enums/categoryTypeEnum.dart';
 import 'package:path_of_market/models/categoryModels.dart';
@@ -14,8 +13,9 @@ class ItemListWidget extends StatefulWidget {
   static const String routeName = '/itemList';
 
   final CategoryType _catType;
+  final bool _isFullMode;
 
-  ItemListWidget(this._catType);
+  ItemListWidget(this._catType, this._isFullMode);
 
   @override
   _ItemListWidgetState createState() => _ItemListWidgetState();
@@ -27,44 +27,20 @@ class _ItemListWidgetState extends State<ItemListWidget> {
   List<Item> _itemList = [];
 
   Icon _searchIcon = Icon(Icons.search);
-  Widget _titleWidget = Text('ItemsList');
+  Widget _titleWidget;
 
   String _filterString = '';
 
   @override
+  void initState() {
+    super.initState();
+    _titleWidget = Text(widget._catType.name);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: _titleWidget,
-          actions: [
-            IconButton(
-                icon: _searchIcon,
-                onPressed: () {
-                  setState(() {
-                    if (_searchIcon.icon == Icons.search) {
-                      _searchIcon = Icon(Icons.cancel);
-                      _titleWidget = TextField(
-                        onChanged: (String value) {
-                          setState(() {
-                            _textSearchCallback(value);
-                          });
-                        },
-                        textInputAction: TextInputAction.go,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Search',
-                            hintStyle: TextStyle(color: Colors.white30)),
-                        style: TextStyle(color: Colors.white, fontSize: 16.0),
-                      );
-                    } else {
-                      _filterString = '';
-                      _searchIcon = Icon(Icons.search);
-                      _titleWidget = Text('ItemsList');
-                    }
-                  });
-                }),
-          ],
-        ),
+        appBar: widget._isFullMode ? _buildAppbar() : null,
         body: FutureBuilder<List<Item>>(
             future: _mainApiService.getItemList(widget._catType),
             builder: (context, snapshot) {
@@ -91,10 +67,6 @@ class _ItemListWidgetState extends State<ItemListWidget> {
       return ItemTile(_item);
   }
 
-  _textSearchCallback(String text) {
-    _filterString = text;
-  }
-
   Widget _buildList() {
     List<Item> filteredList = _filterItemList();
 
@@ -112,5 +84,51 @@ class _ItemListWidgetState extends State<ItemListWidget> {
         .where((item) =>
             item.itemName.toLowerCase().contains(_filterString.toLowerCase()))
         .toList();
+  }
+
+  PreferredSizeWidget _buildAppbar() {
+
+    if (_searchIcon.icon == Icons.search) {
+      _titleWidget = Text(widget._catType.name);
+    }
+
+    return AppBar(
+      title: _titleWidget,
+      centerTitle: true,
+      actions: [
+        IconButton(
+            icon: _searchIcon,
+            onPressed: () {
+              setState(() {
+                if (_searchIcon.icon == Icons.search) {
+                  _searchIcon = Icon(Icons.cancel);
+                  _titleWidget = TextField(
+                    onChanged: (String value) {
+                      setFilterString(value);
+                    },
+                    textInputAction: TextInputAction.go,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search',
+                        hintStyle: TextStyle(color: Colors.white30)),
+                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  );
+                } else {
+                  setState(() {
+                    _filterString = '';
+                    _searchIcon = Icon(Icons.search);
+                    _titleWidget = Text(widget._catType.name);
+                  });
+                }
+              });
+            }),
+      ],
+    );
+  }
+
+  void setFilterString(String str) {
+    setState(() {
+      _filterString = str;
+    });
   }
 }

@@ -1,4 +1,5 @@
 {
   "categoryList" : "Categories",
-  "categoryListError" : "Can't get categories!"
+  "categoryListError" : "Can't get categories!",
+  "selectCategory" : "Select category"
 }

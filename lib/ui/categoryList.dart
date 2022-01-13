@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_of_market/models/categoryModels.dart';
 import 'package:path_of_market/ui/categoryTile.dart';
+import 'package:path_of_market/utils/localization.dart';
 
 class CategoryListWidget extends StatefulWidget {
 
@@ -17,10 +18,16 @@ class CategoryListWidget extends StatefulWidget {
 class _CategoryListWidgetState extends State<CategoryListWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget._categoryList.length,
-      padding: EdgeInsets.symmetric(vertical: 3.0),
-      itemBuilder: _generateCategoryTiles,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(localization.categoryList),
+    leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+    ),
+      body: ListView.builder(
+        itemCount: widget._categoryList.length,
+        padding: EdgeInsets.symmetric(vertical: 3.0),
+        itemBuilder: _generateCategoryTiles,
+      ),
     );
   }
 

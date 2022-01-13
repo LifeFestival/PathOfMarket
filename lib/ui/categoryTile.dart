@@ -39,6 +39,6 @@ class _CategoryTileState extends State<CategoryTile> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ItemListWidget(widget._category.categoryType)));
+                ItemListWidget(widget._category.categoryType, true)));
   }
 }
