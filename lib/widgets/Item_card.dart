@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path_of_market/models/categoryModels.dart';
+import 'package:path_of_market/models/category_models.dart';
 
 class ItemCard extends StatefulWidget {
 

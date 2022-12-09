@@ -1,0 +1,5 @@
+{
+  "categoryList" : "Категории",
+  "categoryListError" : "Не удаётся получить категории!",
+  "selectCategory" : "Выберите категорию"
+}
