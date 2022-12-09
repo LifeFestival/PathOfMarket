@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path_of_market/models/itemsModels.dart';
-import 'package:path_of_market/widgets/ItemCard.dart';
+import 'package:path_of_market/models/items_models.dart';
+import 'package:path_of_market/widgets/Item_card.dart';
 
 class ItemTile extends StatefulWidget {
 

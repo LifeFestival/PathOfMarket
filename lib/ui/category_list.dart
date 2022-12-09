@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:path_of_market/models/categoryModels.dart';
-import 'package:path_of_market/ui/categoryTile.dart';
-import 'package:path_of_market/utils/localization.dart';
+import 'package:path_of_market/models/category_models.dart';
+import 'package:path_of_market/ui/category_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoryListWidget extends StatefulWidget {
 
   final List<Category> _categoryList;
-  final void Function(Category) onCategoryTap;
+  final void Function(Category)? onCategoryTap;
 
   CategoryListWidget(this._categoryList, { this.onCategoryTap });
 
@@ -18,9 +17,12 @@ class CategoryListWidget extends StatefulWidget {
 class _CategoryListWidgetState extends State<CategoryListWidget> {
   @override
   Widget build(BuildContext context) {
+
+    final localization = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(localization.categoryList),
+        title: Text(localization!.categoryList),
     leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
     ),
       body: ListView.builder(

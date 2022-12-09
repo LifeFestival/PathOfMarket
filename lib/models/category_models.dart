@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
-import 'package:path_of_market/enums/categoryTypeEnum.dart';
-import 'package:path_of_market/models/itemsModels.dart';
+import 'package:path_of_market/enums/category_type.dart';
+import 'package:path_of_market/models/items_models.dart';
 
 abstract class Category {
   final CategoryType categoryType;
@@ -19,7 +19,9 @@ abstract class Item {
   final double value;
   final double changePercent;
 
-  Item(this.itemName, this.count, this.value, this.changePercent);
+  final String? iconUrl;
+
+  Item(this.itemName, this.count, this.value, this.changePercent, {this.iconUrl});
 }
 
 class CurrencyCategory extends Category {

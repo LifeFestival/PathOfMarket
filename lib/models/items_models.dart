@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
-import 'package:path_of_market/models/categoryModels.dart';
+import 'package:path_of_market/models/category_models.dart';
 
 class CurrencyItem extends Item {
   @override

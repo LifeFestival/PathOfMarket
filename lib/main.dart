@@ -1,13 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:path_of_market/api/mainApiService.dart';
-import 'package:path_of_market/models/categoryModels.dart';
-import 'package:path_of_market/ui/categoryList.dart';
-import 'package:path_of_market/ui/itemList.dart';
-import 'package:path_of_market/utils/localization.dart';
+import 'package:path_of_market/api/main_api_service.dart';
+import 'package:path_of_market/models/category_models.dart';
+import 'package:path_of_market/ui/category_list.dart';
+import 'package:path_of_market/ui/item_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -41,9 +38,8 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   MainApiService mainApiService = MainApiService();
 
-  List<Category> _categoryList;
-
-  Category _selectedCategory;
+  List<Category> _categoryList = [];
+  Category? _selectedCategory;
 
   @override
   void initState() {
@@ -53,10 +49,11 @@ class _StartScreenState extends State<StartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    localization = AppLocalizations.of(context);
+    final localization = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: PreferredSize(child: AppBar(), preferredSize: Size.fromHeight(0)),
+        appBar:
+            PreferredSize(child: AppBar(), preferredSize: Size.fromHeight(0)),
         backgroundColor: Colors.grey[100],
         body: Center(child: LayoutBuilder(
           builder: (context, constraints) {
@@ -72,9 +69,11 @@ class _StartScreenState extends State<StartScreen> {
                   ),
                   Expanded(
                     child: _selectedCategory == null
-                        ? Center(child: Text(localization.selectCategory))
+                        ? Center(child: Text(localization!.selectCategory))
                         : Center(
-                            child: ItemListWidget(_selectedCategory.categoryType, true)),
+                            child: ItemListWidget(
+                                _selectedCategory!.categoryType, true),
+                          ),
                     flex: 2,
                   )
                 ],
@@ -83,10 +82,10 @@ class _StartScreenState extends State<StartScreen> {
               return CategoryListWidget(_categoryList);
             }
           },
-        )));}
+        )));
+  }
 
   void onCategoryTapCallback(Category category) {
-
     if (_selectedCategory == category) return;
 
     setState(() {

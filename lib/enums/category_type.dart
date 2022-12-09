@@ -1,4 +1,4 @@
-import 'package:path_of_market/utils/categoryNames.dart';
+import 'package:path_of_market/utils/category_names.dart';
 
 enum CategoryType {
   currency,
@@ -24,5 +24,5 @@ extension CategoryName on CategoryType {
     CategoryType.oils: OILS_CAT_NAME
   };
 
-  String get name => names[this];
+  String? get name => names[this];
 }

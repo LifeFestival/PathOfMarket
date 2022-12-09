@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:path_of_market/api/mainApiService.dart';
-import 'package:path_of_market/enums/categoryTypeEnum.dart';
-import 'package:path_of_market/models/categoryModels.dart';
-import 'package:path_of_market/models/itemsModels.dart';
-import 'package:path_of_market/ui/ItemTile.dart';
-import 'package:path_of_market/ui/currencyTile.dart';
-import 'package:path_of_market/utils/localization.dart';
+import 'package:path_of_market/api/main_api_service.dart';
+import 'package:path_of_market/enums/category_type.dart';
+import 'package:path_of_market/models/category_models.dart';
+import 'package:path_of_market/models/items_models.dart';
+import 'package:path_of_market/ui/Item_tile.dart';
+import 'package:path_of_market/ui/currency_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemListWidget extends StatefulWidget {
   static const String routeName = '/itemList';
@@ -27,28 +27,30 @@ class _ItemListWidgetState extends State<ItemListWidget> {
   List<Item> _itemList = [];
 
   Icon _searchIcon = Icon(Icons.search);
-  Widget _titleWidget;
+  Widget? _titleWidget;
 
   String _filterString = '';
 
   @override
   void initState() {
     super.initState();
-    _titleWidget = Text(widget._catType.name);
+    _titleWidget = Text(widget._catType.name ?? '');
   }
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context);
+
     return Scaffold(
         appBar: widget._isFullMode ? _buildAppbar() : null,
         body: FutureBuilder<List<Item>>(
             future: _mainApiService.getItemList(widget._catType),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                _itemList = snapshot.data;
+                _itemList = snapshot.data!;
                 return Center(child: _buildList());
               } else if (snapshot.hasError) {
-                log(localization.categoryListError +
+                log(localization!.categoryListError +
                     ' ' +
                     snapshot.error.toString() +
                     '\n' +
@@ -63,8 +65,10 @@ class _ItemListWidgetState extends State<ItemListWidget> {
 
     if (_item is CurrencyItem) {
       return CurrencyTile(_item);
-    } else
+    } else if (_item is RegularItem) {
       return ItemTile(_item);
+    } else
+      throw Exception('Unknown item type - ${_item.runtimeType}');
   }
 
   Widget _buildList() {
@@ -87,9 +91,8 @@ class _ItemListWidgetState extends State<ItemListWidget> {
   }
 
   PreferredSizeWidget _buildAppbar() {
-
     if (_searchIcon.icon == Icons.search) {
-      _titleWidget = Text(widget._catType.name);
+      _titleWidget = Text(widget._catType.name ?? '');
     }
 
     return AppBar(
@@ -117,7 +120,7 @@ class _ItemListWidgetState extends State<ItemListWidget> {
                   setState(() {
                     _filterString = '';
                     _searchIcon = Icon(Icons.search);
-                    _titleWidget = Text(widget._catType.name);
+                    _titleWidget = Text(widget._catType.name ?? '');
                   });
                 }
               });
